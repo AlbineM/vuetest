@@ -41,7 +41,7 @@ async function getRestaurantById(id) {
     } catch(error) {
         console.error(error)
         if (error?.response?.status === 404) {
-            
+            router.push({name: 'not-found'})
         }
     }
 }
