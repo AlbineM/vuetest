@@ -7,9 +7,22 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+    },
+    {
+      path: '/restaurants-list',
+      name: 'restaurants',
+      component: () => import('../views/RestaurantsList.vue'),
+      children : [
+      ]
+    },
+    {
+      path: '/restaurant/:restaurantalias',
+      name: 'restaurant-details',
+      component: () => import('../views/RestaurantDetails.vue'),
     }
-  ]
+  ],
+  linkActiveClass: 'bg-gray-900 text-white block'
 })
 
 export default router
