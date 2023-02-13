@@ -5,8 +5,12 @@ import TheHeader from '@/components/TheHeader.vue';
 </script>
 
 <template>
-  <TheHeader />
-  <RouterView />
-  <TheFooter />
+  <div class="h-screen flex flex-col">
+    <TheHeader class="fixed w-full z-10"/>
+    <main class="pt-10">
+      <RouterView />
+    </main>
+    <TheFooter/>
+  </div>
 </template>
 
