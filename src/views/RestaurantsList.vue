@@ -1,5 +1,6 @@
 <script setup>
 import RestaurantsListCard from '../components/RestaurantsListCard.vue';
+import FiltersNavbar from '../components/FiltersNavbar.vue';
 import { inject, onMounted, ref, reactive } from 'vue';
 
 const axios = inject('axios')
@@ -8,21 +9,27 @@ let restaurantsList = ref(null);
 let loading = ref(false);
 let params = reactive({
     location: HOTEL_ADDRESS,
-    open_now: false,
+    open_now: null,
     limit: 50,
     term: null,
-    radius: null,
+    radius: 40000,
     categories: null,
     price: null,
     open_at: null,
+    offset: null,
 })
-let search = null
 
-async function getRestaurants(dynamicParams=null) {
+let sortKey = ref(null)
+
+async function getRestaurants(dynamicParams=null, loadMore=false) {
+    console.log(dynamicParams);
     loading.value = true
     let reqParams = params
     if(dynamicParams && dynamicParams instanceof Object ) {
         reqParams = Object.assign(reqParams, dynamicParams);
+    }
+    if (reqParams.categories && Array.isArray(reqParams.categories)) {
+        reqParams.categories = reqParams.categories.map(cat => cat.alias).toString()
     }
     try {
         const { data } = await axios({
@@ -30,70 +37,82 @@ async function getRestaurants(dynamicParams=null) {
             method: 'GET',
             params: reqParams
         })
-        restaurantsList.value = data.businesses
-        console.log(restaurantsList)
+        if(loadMore) {
+            restaurantsList.value = data.businesses.reduce((acc, value) => {
+                return [...acc, value]
+            }, restaurantsList.value)
+            console.log(restaurantsList.value)
+        }
+        else restaurantsList.value = data.businesses
     } catch(error) {
-        console.error(error)
+        console.error(error?.response?.status)
     }
     loading.value = false
 }
 
-async function autocomplete(e) {
-    // si search = ''
-    try {
-        const { data } = await axios({
-            url: '/autocomplete',
-            method: 'GET',
-            params: {
-                text: e
+function sortRestaurantsList(list, key) {
+    sortKey.value = key;
+    return list.sort((a, b) => {
+        console.log(a.price, b.price);
+        if (key === "price") {
+            if (!a[key] && !b[key]) {
+                return 0;
             }
-        })
-        restaurantsList.value = data.businesses
-    } catch(error) {
-        console.error(error)
-    }
-
+            if (!a[key]) {
+                return -1;
+            }
+            if (!b[key]) {
+                return 1;
+            }
+            if (a[key]?.length < b[key]?.length) {
+                return -1;
+            }
+            if (a[key]?.length > b[key]?.length) {
+                return 1;
+            }
+            return 0;
+        } else {
+            if (a[key] < b[key]) {
+                return -1;
+            }
+            if (a[key] > b[key]) {
+                return 1;
+            }
+            return 0;
+        }
+    });
 }
-
 
 
 onMounted(() => {
     getRestaurants();
 })
-
-
 </script>
 
 <template>
-    <section class="flex justify-center p-6">
-
-        <div v-if="loading">
+    <section class="flex flex-col justify-center">
+        <div class="col-span-full m-6">
+            <FiltersNavbar @searchRestaurants="getRestaurants($event)"/>
+            <div>
+                <span class="text-gray-700 font-semibold">Sort by: </span>
+                <button class="rounded-lg bg-gray-500 hover:bg-gray-400 p-1 mr-1 text-white" :class="{'bg-teal-400' : sortKey === 'name'}" @click="sortRestaurantsList(restaurantsList, 'name')">A-Z</button>
+                <button class="rounded-lg bg-gray-500 hover:bg-gray-400 p-1 mr-1 text-white" :class="{'bg-teal-400' : sortKey === 'price'}" @click="sortRestaurantsList(restaurantsList, 'price')">Prices</button>
+                <button class="rounded-lg bg-gray-500 hover:bg-gray-400 p-1 mr-1 text-white" :class="{'bg-teal-400' : sortKey === 'rating'}" @click="sortRestaurantsList(restaurantsList, 'rating')">Ratings</button>
+            </div>
+        </div>
+        
+        <div v-if="loading" class="w-full text-center">
             {{ loading ? 'Chargement en cours...' : 'Erreur lors du chargement de la liste des restaurants' }}
         </div>
-        <div v-else-if="restaurantsList && Array.isArray(restaurantsList)" class="lg grid grid-cols-5 gap-4 p-4 justify-center">
-
-            <form class=" col-span-full">
-                <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    <input type="search" id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search restaurants ..." v-model="search" @input="autocomplete(search)" required>
-                    <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
-                </div>
-            </form>
-            <div class="filters w-full col-span-full">
-                <button type="button" class="inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out" @click="getRestaurants({open_now: !params.open_now})">
-                    {{ params.open_now ? 'All' : 'Currently opened' }}
-                </button>
-            </div>
+        <div v-if="restaurantsList && Array.isArray(restaurantsList) && restaurantsList.length > 0" class="w-full 2xl:max-w-screen-2xl grid sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 p-4 lg:justify-center 2xl:mx-auto">
+            
             <RestaurantsListCard v-for="item in restaurantsList" :key="item.id" :restaurant="item" @filter-by="getRestaurants"/>
-            <button type="button" class="  " @click="getRestaurants({offset: 50})">
-                Load more restaurants
-            </button>
         </div>
-        <div v-else-if="restaurantsList && Array.isArray(restaurantsList) && restaurantsList.length === 0">
-            Pas de résultat
+        <button class="rounded-lg mx-auto col-span-full bg-gray-500 p-2 text-white mt-20 mb-4" v-if="restaurantsList?.length >= 50" type="button" @click="getRestaurants({offset: restaurantsList.length}, loadMore=true)">
+            Load more restaurants
+        </button>
+        <div class="text-gray-900 text-medium" v-else-if="restaurantsList && Array.isArray(restaurantsList) && restaurantsList.length === 0">
+            No result
         </div>
     </section>
 </template>

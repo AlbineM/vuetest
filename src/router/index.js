@@ -13,14 +13,23 @@ const router = createRouter({
       path: '/restaurants-list',
       name: 'restaurants',
       component: () => import('../views/RestaurantsList.vue'),
-      children : [
-      ]
     },
     {
       path: '/restaurant/:restaurantalias',
       name: 'restaurant-details',
       component: () => import('../views/RestaurantDetails.vue'),
-    }
+    },
+    {
+      path: '/internal-error/',
+      name: 'internal-error',
+      component: () => import('../views/500.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/404.vue'),
+    },
+
   ],
   linkActiveClass: 'bg-gray-900 text-white block'
 })

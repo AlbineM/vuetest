@@ -5,7 +5,7 @@ import TheWelcome from '@/components/TheWelcome.vue';
 
 <template>
   <!-- The Container -->
-  <div class="mx-52">
+  <div>
     <TheWelcome />
   </div>
 

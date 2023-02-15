@@ -1,13 +1,22 @@
 <script setup>
+import { ref } from 'vue';
+
+let isOpen = ref(false);
+
+function updateMenuState(state) {
+  setTimeout(() => {
+    isOpen.value = state;
+  }, 30);
+}
 </script>
 
 <template>
   <header>
-    <nav class="bg-gray-800">
+    <nav class="bg-gray-800 w-full" @focusout="updateMenuState(false)">
       <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="relative flex items-center justify-between h-16">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="updateMenuState(!isOpen)" aria-controls="mobile-menu" aria-expanded="false" >
               <span class="sr-only">Open main menu</span>
 
               <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -25,7 +34,7 @@
             </div>
             <div class="hidden sm:block sm:ml-6">
               <div class="flex space-x-4">
-                <router-link :to="{name: 'home'}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</router-link>
+                <router-link :to="{name: 'home'}"  class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</router-link>
 
                 <router-link :to="{name: 'restaurants'}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Restaurants List</router-link>
               </div>
@@ -34,7 +43,7 @@
         </div>
       </div>
 
-      <div class="sm:hidden" id="mobile-menu">
+      <div class="sm:hidden transition ease-out duration-1000 " :class="{'hidden' : !isOpen}" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1">
           <router-link :to="{name: 'home'}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Home</router-link>
 
