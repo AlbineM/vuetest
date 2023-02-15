@@ -31,7 +31,7 @@ function updateDropdownState(state) {
         
         <!-- Dropdown menu -->
         <div id="dropdown" :class="{'hidden' : !isOpen }" class="z-10 bg-white rounded-lg shadow flex flex-col w-24 dark:bg-teal-500 absolute">
-            <ul v-if="options && Array.isArray(options)" v-for="option in options" :key="option" class="h-10 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton" aria-describedby="Price list">
+            <ul v-if="options && Array.isArray(options)" v-for="option in options" :key="option" class="h-10 px-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton" aria-describedby="Price list">
                 <li>
                     <div class="flex items-center pl-2 rounded hover:bg-teal-100 dark:hover:bg-teal-600">
                         <input type="radio" :checked="price === option" class="w-4 h-4 text-teal-600 bg-teal-100 border-teal-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-teal-700 dark:focus:ring-offset-teal-700 focus:ring-2 dark:bg-teal-600 dark:border-teal-500" @click="emits('update:price', option)">

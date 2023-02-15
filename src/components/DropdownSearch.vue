@@ -86,7 +86,7 @@ function removeFromSelectedOptions(removedOption) {
                     <input type="text" id="input-group-search" v-model="searchInput" @input="getoptions(searchInput)" class="block w-full p-2 pl-10 text-sm text-gray-900 border border-teal-300 rounded-lg bg-teal-50 focus:ring-teal-500 focus:border-teal-500 dark:bg-teal-600 dark:border-teal-500 dark:placeholder-teal-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500" placeholder="Search category" >
                 </div>
             </div>
-            <ul v-if="options && Array.isArray(options)" v-for="option in options" :key="option" class="h-10 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton" aria-describedby="Categories list">
+            <ul v-if="options && Array.isArray(options)" v-for="option in options" :key="option" class="h-10 px-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton" aria-describedby="Categories list">
                 <li>
                     <div class="flex items-center pl-2 rounded hover:bg-teal-100 dark:hover:bg-teal-600">
                         <input type="checkbox" class="w-4 h-4 text-teal-600 bg-teal-100 border-teal-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-teal-700 dark:focus:ring-offset-teal-700 focus:ring-2 dark:bg-teal-600 dark:border-teal-500" @click="addToSelectedOptions(option)">
@@ -95,7 +95,7 @@ function removeFromSelectedOptions(removedOption) {
                 </li>
                 <li v-if="options.length === 0">No result</li>
             </ul>
-            <ul v-if="categoriesRef && Array.isArray(categoriesRef)" v-for="option in categoriesRef" :key="option" class="h-10 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-describedby="Selected categories">
+            <ul v-if="categoriesRef && Array.isArray(categoriesRef)" v-for="option in categoriesRef" :key="option" class="h-10 px-3  overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-describedby="Selected categories">
                 <li>
                     <div class="flex items-center pl-2 rounded hover:bg-teal-100 dark:hover:bg-teal-600">
                         <input type="checkbox" :checked="true" class="w-4 h-4 text-teal-600 bg-teal-100 border-teal-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-teal-700 dark:focus:ring-offset-teal-700 focus:ring-2 dark:bg-teal-600 dark:border-teal-500" @click="removeFromSelectedOptions(option)">
