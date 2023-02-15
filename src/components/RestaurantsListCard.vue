@@ -11,7 +11,7 @@ const emits = defineEmits([
 </script>
 
 <template>
-    <div class="grid">
+    <div class="flex">
         <div class="antialiased text-gray-900 w-full xl:w-80" >
             <img :src="`${restaurant.image_url}`" :alt="`image of the ${restaurant.name}`" class="flex h-40 sm:h-80 xl:w-80 w-full object-cover object-center rounded-lg shadow-md">
             <div class="px-3 -mt-16 flex">
