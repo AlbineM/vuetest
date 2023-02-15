@@ -24,7 +24,7 @@ function updateDropdownState(state) {
 
 <template>
     <div class="relative">
-        <button class="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800" type="button" @click="updateDropdownState(!isOpenRef)">
+        <button class="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800" type="button" @click="updateDropdownState(!isOpen)">
             {{ dropdownTitle }}
             <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -35,7 +35,7 @@ function updateDropdownState(state) {
                 <li>
                     <div class="flex items-center pl-2 rounded hover:bg-teal-100 dark:hover:bg-teal-600">
                         <input type="radio" :checked="price === option" class="w-4 h-4 text-teal-600 bg-teal-100 border-teal-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-teal-700 dark:focus:ring-offset-teal-700 focus:ring-2 dark:bg-teal-600 dark:border-teal-500" @click="emits('update:price', option)">
-                        <label class="w-full py-2 ml-2 text-sm font-medium text-white"> {{'$'.repeat(option)}} </label>
+                        <label class="w-full py-2 ml-2 text-sm font-medium text-teal-900 dark:text-white"> {{'$'.repeat(option)}} </label>
                     </div>
                 </li>
                 <li v-if="options.length === 0">No result</li>

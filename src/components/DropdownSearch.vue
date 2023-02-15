@@ -90,7 +90,7 @@ function removeFromSelectedOptions(removedOption) {
                 <li>
                     <div class="flex items-center pl-2 rounded hover:bg-teal-100 dark:hover:bg-teal-600">
                         <input type="checkbox" class="w-4 h-4 text-teal-600 bg-teal-100 border-teal-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-teal-700 dark:focus:ring-offset-teal-700 focus:ring-2 dark:bg-teal-600 dark:border-teal-500" @click="addToSelectedOptions(option)">
-                        <label class="w-full py-2 ml-2 text-sm font-medium text-white">{{ option.title }}</label>
+                        <label class="w-full py-2 ml-2 text-sm font-medium text-teal-900 dark:text-white">{{ option.title }}</label>
                     </div>
                 </li>
                 <li v-if="options.length === 0">No result</li>
@@ -99,7 +99,7 @@ function removeFromSelectedOptions(removedOption) {
                 <li>
                     <div class="flex items-center pl-2 rounded hover:bg-teal-100 dark:hover:bg-teal-600">
                         <input type="checkbox" :checked="true" class="w-4 h-4 text-teal-600 bg-teal-100 border-teal-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-teal-700 dark:focus:ring-offset-teal-700 focus:ring-2 dark:bg-teal-600 dark:border-teal-500" @click="removeFromSelectedOptions(option)">
-                        <label class="w-full py-2 ml-2 text-sm font-medium text-white">{{ option.title }}</label>
+                        <label class="w-full py-2 ml-2 text-sm font-medium text-teal-900 dark:text-white">{{ option.title }}</label>
                     </div>
                 </li>
                 <li v-if="options.length === 0">No result</li>
